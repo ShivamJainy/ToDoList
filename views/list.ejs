@@ -1,0 +1,26 @@
+<%- include('header'); -%>
+  <%  if(currentDay == 0 || currentDay == 6) {   day="weekend"; %>
+  <%  }else{  day="working day"; } %>
+<div class="box">
+<div id="heading">
+  <h1 >
+    <%= kindOfDay %>
+  </h1>
+</div>
+<div class="item">
+    <!-- <% // for(var i=0;i<l;i++){ %> -->
+    <% itemslist.forEach(function(obj){ %>
+      <div><input type="checkbox"><p><%=obj.name%></p></div>
+  <%  }) %>
+
+    <%//}%>
+
+</div>
+
+  <form class="" action="/" method="post">
+    <input placeholder="Enter To Add" type="text" name="AddToList" autocomplete="off" >
+    <button type="Add" name="AddBtn" value=<%=value%>>+</button>
+  </form>
+</div>
+
+<%- include('footer'); -%>
