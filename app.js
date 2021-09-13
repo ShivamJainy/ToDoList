@@ -30,6 +30,11 @@ const item3=new Item({
 let defaultArray=[item1,item2,item3];
 
  /*  */
+ const listSchema={
+   name:String,
+   items:[itemsSchema]
+ }
+ const List=mongoose.model("List",listSchema);
 
 let c=0;
 
@@ -86,7 +91,7 @@ value="list";
      }
 
      else
-    res.render("list",{currentDay:currentDay,day:day,kindOfDay:cDay,l:result.length,itemslist:result,value:value});
+    res.render("list",{currentDay:currentDay,day:day,kindOfDay:cDay,l:result.length,itemslist:result});
 
   })
 
@@ -95,42 +100,45 @@ value="list";
 app.post("/",function(req,res){
   let listItem=req.body.AddToList;
 
+let listName=req.body.AddBtn;
+
   const item=new Item({
   name:listItem
 });
 
 
+  if(c===1)
+  {
 
-if(c===1)
-{
+    Item.deleteMany({},function(err){
+     if(err)
+     console.log("unsucessfull To delete");
+     else
+     {
+       Item.insertMany(item ,function(err){
+        if(err)
+        console.log("unable to add array of items");
+        else{
+          c=0;
+        res.redirect("/");
 
-  Item.deleteMany({},function(err){
-   if(err)
-   console.log("unsucessfull To delete");
-   else
-   {
-     Item.insertMany(item ,function(err){
-      if(err)
-      console.log("unable to add array of items");
-      else{
-        c=0;
-      res.redirect("/");
+        }
+       });
 
-      }
-     });
+     }
+   });
+  }
+  else{
 
-   }
- });
-}
-else{
+    Item.insertMany(item ,function(err){
+     if(err)
+     console.log("unable to add array of items");
+     else
+     res.redirect("/");
+    });
+  }
 
-  Item.insertMany(item ,function(err){
-   if(err)
-   console.log("unable to add array of items");
-   else
-   res.redirect("/");
-  });
-}
+
 
 
 
@@ -149,9 +157,38 @@ else{
 
 });
 
-app.get("/work",function(req,res){
-value="work list";
-  res.render("list",{currentDay:"",day:day,kindOfDay:"Work List",l:worklist.length,itemslist:worklist,value:value});
+app.post("/delete",function(req,res){
+  Item.deleteOne({_id:req.body.DeleteBtn},function(err){
+    if(err)
+    console.log("Delete unsucessfull");
+    else
+    res.redirect("/");
+});
+
+});
+
+app.get("/:CustomList",function(req,res){
+const customList=req.params.CustomList;
+
+  List.findOne({name:customList},function(err,foundArray){
+    if(!err)
+    {
+
+      if(!foundArray){
+
+        const list=new List({
+          name:customList,
+          items:defaultArray
+        });
+        list.save();
+        res.redirect("/"+customList);
+      }else{
+        res.render("list",{currentDay:"Today",day:"Today",kindOfDay:foundArray.name,l:foundArray.items.length,itemslist:foundArray.items});
+      }
+    }
+  });
+/*value="work list";
+  res.render("list",{currentDay:"",day:day,kindOfDay:"Work List",l:worklist.length,itemslist:worklist,value:value})*/
 })
 
 app.get("/about",function(req,res){
