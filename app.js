@@ -74,8 +74,8 @@ app.get("/",function(req,res){
 
   }
 value="list";
-  console.log(date.date);// date() as running function is called
-  console.log(date.day());// anonnymous function is called thats why () is required
+//  console.log(date.date);// date() as running function is called
+//  console.log(date.day());// anonnymous function is called thats why () is required
 
    Item.find({},function(err,result){
      if(result.length===0)//adding Defaults
@@ -102,11 +102,15 @@ app.post("/",function(req,res){
 
 let listName=req.body.AddBtn;
 
+console.log(listName);
+console.log(cDay);
+
   const item=new Item({
   name:listItem
 });
 
-
+if(listName===cDay)
+{
   if(c===1)
   {
 
@@ -138,8 +142,26 @@ let listName=req.body.AddBtn;
     });
   }
 
-
-
+}
+else{
+  List.findOne({name:listName},function(err,foundList){
+//console.log(foundList.items);
+//console.log(defaultArray);
+    if(foundList.items[0].name===defaultArray[0].name && foundList.items[1].name===defaultArray[1].name && foundList.items[2].name===defaultArray[2].name)
+    {
+      //console.log("hi");
+      foundList.items=[];
+      foundList.items.push(item);
+      foundList.save();
+      res.redirect("/"+listName);
+    }else{
+      //console.log("hi2");
+      foundList.items.push(item);
+      foundList.save();
+      res.redirect("/"+listName);
+    }
+  })
+}
 
 
 
