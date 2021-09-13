@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser=require("body-parser");
 const date=require(__dirname+"/date.js");
 const mongoose=require("mongoose");
-
+const _ = require("lodash");
 const app=express();
 
 // let worklist=[];
@@ -212,7 +212,7 @@ else{
 });
 
 app.get("/:CustomList",function(req,res){
-const customList=req.params.CustomList;
+const customList=_.capitalize(req.params.CustomList);
 
   List.findOne({name:customList},function(err,foundArray){
     if(!err)
