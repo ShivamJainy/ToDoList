@@ -3,7 +3,7 @@
   <%  }else{  day="working day"; } %> -->
 <div class="box">
 <div id="heading">
-  <h1 >
+  <h1  >
     <%= kindOfDay %>
   </h1>
 </div>
@@ -14,8 +14,9 @@
        <% itemslist.forEach(function(obj){ %>
          <div class="item"><input type="checkbox"><p><%=obj.name%></p>
            <button type="Delete" name="DeleteBtn" value=<%=obj._id%>>&#10229</button></div>
-     <%  }) %>
 
+     <%  }) %>
+ <input type="hidden" name="listName" value="<%= kindOfDay %>">
        <%//}%>
 
 

@@ -180,12 +180,34 @@ else{
 });
 
 app.post("/delete",function(req,res){
+
+const listName=req.body.listName;
+if(listName===cDay)
+{
   Item.deleteOne({_id:req.body.DeleteBtn},function(err){
     if(err)
     console.log("Delete unsucessfull");
     else
     res.redirect("/");
 });
+}
+else{
+  List.findOneAndUpdate({name:listName},{$pull:{items:{_id:req.body.DeleteBtn}}},function(err,foundList){
+    if(!err){
+      res.redirect("/"+listName);
+    }
+  });
+}
+/*List.deleteOne({_id:req.body.DeleteBtn},function(err){
+  if(err)
+  console.log("Delete unsucessfull");
+  else
+  {
+    List.findOne({_id:req.body.DeleteBtn},function(err,delete1){
+      console.log(delete1);
+    });
+  }
+});*/
 
 });
 

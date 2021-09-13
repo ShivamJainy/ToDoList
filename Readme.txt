@@ -1,5 +1,9 @@
 First Commit: Database storing values on clicking + button
 
+Second Commit:added new lists like this /lists
+
+Third Commit: corrected + button
+
 First Commit code.
 const express = require("express");
 const bodyParser=require("body-parser");
